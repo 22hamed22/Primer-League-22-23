@@ -35,20 +35,28 @@ home = mean_values.sort_values('Goal_For', ascending=False)
 st.write("Top teams based on total goals scored:")
 st.write(home.head())
 
-# Create a color map for each team dynamically
+# New color dictionary provided
 team_colors = {
-    'Arsenal': '#D00000',  # Arsenal Red (RAL 3000 Flame Red)
-    'Manchester City': '#A7C6ED',  # Manchester City Sky Blue (Hex: #A7C6ED)
-    'Manchester United': '#C8102E',  # Manchester United Red (RAL 3003 Ruby Red)
-    'Chelsea': '#0061F2',  # Chelsea Blue (RAL 5005 Signal Blue)
-    'Liverpool': '#D00000',  # Liverpool Red (RAL 3004 Purple Red)
-    'Tottenham Hotspur': '#003B5C',  # Tottenham Navy (RAL 5003 Sapphire Blue)
-    'Newcastle United': '#000000',  # Newcastle Black (RAL 9005 Jet Black)
-    'West Ham United': '#7A2A48',  # West Ham Claret (RAL 3007 Black Red)
-    'Aston Villa': '#2A1A47',  # Aston Villa Claret (RAL 4006 Traffic Violet)
-    'Leicester City': '#0D5F3E',  # Leicester Green (RAL 6000 Patina Green)
-    'Brighton & Hove Albion': '#75B5D0',  # Brighton Light Blue (RAL 6027 Light Green)
-    'Crystal Palace': '#1B3561',  # Crystal Palace Blue (RAL 4005 Blue Lilac)
+    'Manchester City': '#01D4D1',    
+    'Arsenal': '#FA3737',    
+    'Liverpool': '#D40108',    
+    'Brighton & Hove Albion': '#0057B8',    
+    'Tottenham Hotspur': '#132257',
+    'Manchester United': '#FF5533',    
+    'Newcastle United': '#241F20',    
+    'Brentford': '#E20E0E',    
+    'Aston Villa': '#92024A',    
+    'Fulham': '#37010F',
+    'Nottingham Forest': '#03F71D',    
+    'West Ham United': '#7A263A',    
+    'Leeds United': '#FFCD00',    
+    'Leicester City': '#003090',    
+    'Crystal Palace': '#1B458F',
+    'AFC Bournemouth': '#660610',    
+    'Chelsea': '#0408EE',    
+    'Southampton': '#D71920',    
+    'Wolverhampton Wanderers': '#EEDC04',    
+    'Everton': '#003399'
 }
 
 # Create a color list based on the teams in the 'home' data
