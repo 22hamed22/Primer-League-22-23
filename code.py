@@ -2,7 +2,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-# HTML content with inline CSS
+# HTML content with inline CSS for Streamlit header
 html_code = """
 <div class="h1" style="background-color: #FFFFFF; color: #470B63; padding: 20px; font-size: 45px; max-width: 3500px; margin: auto; margin-top: 50px; display: flex; align-items: center; text-align: center; text-shadow: 1px 1px 1px #13A7AC;">
     <img src="https://logowik.com/content/uploads/images/premier-league-lion8499.jpg" alt="Image" width="300" style="float: left;">
@@ -13,42 +13,51 @@ html_code = """
 # Display the HTML header using Streamlit
 st.markdown(html_code, unsafe_allow_html=True)
 
-# Load the data
+# Load the data (use your actual CSV file location here)
 d = pd.read_csv('premier_league_df.csv')
 
-# Display the columns to check for mismatches
-st.write("Columns in the dataset:")
-st.write(d.columns)
+# Renaming columns for consistency with the expected column names
+d.rename(columns={'HomeTeam': 'home team', 'AwayTeam': 'away team'}, inplace=True)
 
-# Strip any extra spaces from the column names
-d.columns = d.columns.str.strip()
+# Proceed with the existing code to process the data
+d = d[['home team', 'away team', 'FTHG', 'FTAG']]
+df = d.copy()
 
-# Check if all expected columns are present
-expected_columns = ['HomeTeam', 'AwayTeam', 'FTHG', 'FTAG']
-missing_columns = [col for col in expected_columns if col not in d.columns]
+df.rename(columns={'home team': 'team'}, inplace=True)
+df.rename(columns={'FTHG': 'Goal_For'}, inplace=True)
+df.rename(columns={'FTAG': 'Goal_Against'}, inplace=True)
 
-# If any columns are missing, show an error
-if missing_columns:
-    st.error(f"Missing columns: {', '.join(missing_columns)}")
-else:
-    # Proceed with data processing
-    d = d[expected_columns]
-    df = d.copy()
+# Grouping and sorting the data
+mean_values = df.groupby('team').sum('Goal_For')
+home = mean_values.sort_values('Goal_For', ascending=False)
 
-    # Renaming columns for clarity
-    df.rename(columns={'HomeTeam': 'team'}, inplace=True)
-    df.rename(columns={'FTHG': 'Goal_For'}, inplace=True)
-    df.rename(columns={'FTAG': 'Goal_Against'}, inplace=True)
+# Display the top teams based on goals scored
+st.write("Top teams based on total goals scored:")
+st.write(home.head())
 
-    # Grouping and sorting the data
-    mean_values = df.groupby('team').sum('Goal_For')
-    home = mean_values.sort_values('Goal_For', ascending=False)
+# Define custom colors for the teams
+team_colors = {
+    'Arsenal': 'red',  # RAL 3000 - Flame red
+    'Manchester City': '#5CA9E1',  # Manchester City Sky Blue (Hex: #5CA9E1)
+    'Manchester United': 'darkred',  # RAL 3003 - Ruby red
+    'Chelsea': 'blue',  # RAL 5005 - Signal blue
+    'Liverpool': 'crimson',  # RAL 3004 - Purple red
+    'Tottenham Hotspur': 'navy',  # RAL 5003 - Sapphire blue
+    'Newcastle United': 'black',  # RAL 9005 - Jet black
+    'West Ham United': 'claret',  # RAL 3007 - Black red
+    'Aston Villa': 'violet',  # RAL 4006 - Traffic violet
+    'Leicester City': 'green',  # RAL 6000 - Patina green
+    'Brighton & Hove Albion': 'lightgreen',  # RAL 6027 - Light green
+    'Crystal Palace': 'blueviolet',  # RAL 4005 - Blue lilac
+}
 
-    # Display the top teams based on goals scored
-    st.write("Top teams based on total goals scored:")
-    st.write(home.head())
+# Plotting the data using Plotly with each team having a different color
+fig = px.bar(home.head(), 
+             x=home.head().index, 
+             y='Goal_For', 
+             title='Top Teams by Goals Scored', 
+             color=home.head().index,  # Color by team name (index)
+             color_discrete_map=team_colors)  # Use custom colors
 
-    # Plotting the data using Plotly
-    fig = px.bar(home.head(), x=home.head().index, y='Goal_For', title='Top Teams by Goals Scored')
-    st.plotly_chart(fig)
-
+# Display the chart in Streamlit
+st.plotly_chart(fig)
