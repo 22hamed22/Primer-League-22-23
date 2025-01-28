@@ -12,34 +12,41 @@ html_code = """
     <img src="https://logowik.com/content/uploads/images/premier-league-lion8499.jpg" alt="Image" width="300" style="float: right;">
 </div>
 """
-
-# Read the dataset (you can use your local CSV or load it from a file)
-# Make sure you replace this with the correct path to your CSV
+# Load the data
 d = pd.read_csv('premier_league_df.csv')
 
+# Display the columns to check for mismatches
+st.write("Columns in the dataset:")
+st.write(d.columns)
 
-# Display the HTML content
-st.markdown(html_code, unsafe_allow_html=True)
+# Strip any extra spaces from the column names
+d.columns = d.columns.str.strip()
 
-# Data processing
-d = d[['home team', 'away team', 'FTHG', 'FTAG']]
-df = d.copy()
+# Check if all expected columns are present
+expected_columns = ['home team', 'away team', 'FTHG', 'FTAG']
+missing_columns = [col for col in expected_columns if col not in d.columns]
 
-# Renaming columns
-df.rename(columns={'home team': 'team'}, inplace=True)
-df.rename(columns={'FTHG': 'Goal_For'}, inplace=True)
-df.rename(columns={'FTAG': 'Goal_Against'}, inplace=True)
+# If any columns are missing, show an error
+if missing_columns:
+    st.error(f"Missing columns: {', '.join(missing_columns)}")
+else:
+    # Proceed with data processing
+    d = d[expected_columns]
+    df = d.copy()
 
-# Grouping and summing by team
-mean_values = df.groupby('team').sum()
+    # Renaming columns for clarity
+    df.rename(columns={'home team': 'team'}, inplace=True)
+    df.rename(columns={'FTHG': 'Goal_For'}, inplace=True)
+    df.rename(columns={'FTAG': 'Goal_Against'}, inplace=True)
 
-# Sorting teams based on the goals scored (Goal_For)
-home = mean_values.sort_values('Goal_For', ascending=False)
+    # Grouping and sorting the data
+    mean_values = df.groupby('team').sum('Goal_For')
+    home = mean_values.sort_values('Goal_For', ascending=False)
 
-# Display the top teams with highest goals scored in the Streamlit app
-st.write("Top teams based on total goals scored:")
-st.write(home.head())
+    # Display the top teams based on goals scored
+    st.write("Top teams based on total goals scored:")
+    st.write(home.head())
 
-# You can also visualize this data using Plotly
-fig = px.bar(home.head(), x=home.head().index, y='Goal_For', title='Top Teams by Goals Scored')
-st.plotly_chart(fig)
+    # Plotting the data using Plotly
+    fig = px.bar(home.head(), x=home.head().index, y='Goal_For', title='Top Teams by Goals Scored')
+    st.plotly_chart(fig)
