@@ -35,20 +35,20 @@ home = mean_values.sort_values('Goal_For', ascending=False)
 st.write("Top teams based on total goals scored:")
 st.write(home.head())
 
-# Define custom colors for the teams
+# Define custom colors for the teams (Correct colors for each team)
 team_colors = {
-    'Arsenal': 'red',  # RAL 3000 - Flame red
-    'Manchester City': '#5CA9E1',  # Manchester City Sky Blue (Hex: #5CA9E1)
-    'Manchester United': 'darkred',  # RAL 3003 - Ruby red
-    'Chelsea': 'blue',  # RAL 5005 - Signal blue
-    'Liverpool': 'crimson',  # RAL 3004 - Purple red
-    'Tottenham Hotspur': 'navy',  # RAL 5003 - Sapphire blue
-    'Newcastle United': 'black',  # RAL 9005 - Jet black
-    'West Ham United': 'claret',  # RAL 3007 - Black red
-    'Aston Villa': 'violet',  # RAL 4006 - Traffic violet
-    'Leicester City': 'green',  # RAL 6000 - Patina green
-    'Brighton & Hove Albion': 'lightgreen',  # RAL 6027 - Light green
-    'Crystal Palace': 'blueviolet',  # RAL 4005 - Blue lilac
+    'Arsenal': '#D00000',  # Arsenal Red (RAL 3000 Flame Red)
+    'Manchester City': '#A7C6ED',  # Manchester City Sky Blue (Hex: #A7C6ED)
+    'Manchester United': '#C8102E',  # Manchester United Red (RAL 3003 Ruby Red)
+    'Chelsea': '#0061F2',  # Chelsea Blue (RAL 5005 Signal Blue)
+    'Liverpool': '#D00000',  # Liverpool Red (RAL 3004 Purple Red)
+    'Tottenham Hotspur': '#003B5C',  # Tottenham Navy (RAL 5003 Sapphire Blue)
+    'Newcastle United': '#000000',  # Newcastle Black (RAL 9005 Jet Black)
+    'West Ham United': '#7A2A48',  # West Ham Claret (RAL 3007 Black Red)
+    'Aston Villa': '#2A1A47',  # Aston Villa Claret (RAL 4006 Traffic Violet)
+    'Leicester City': '#0D5F3E',  # Leicester Green (RAL 6000 Patina Green)
+    'Brighton & Hove Albion': '#75B5D0',  # Brighton Light Blue (RAL 6027 Light Green)
+    'Crystal Palace': '#1B3561',  # Crystal Palace Blue (RAL 4005 Blue Lilac)
 }
 
 # Plotting the data using Plotly with each team having a different color
