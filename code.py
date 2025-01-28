@@ -35,9 +35,9 @@ home = mean_values.sort_values('Goal_For', ascending=False)
 st.write("Top teams based on total goals scored:")
 st.write(home.head())
 
-# New color dictionary provided
+# Color dictionary with updated team names
 team_colors = {
-    'Man City': '#01D4D1',    
+    'Manchester City': '#01D4D1',    
     'Arsenal': '#FA3737',    
     'Liverpool': '#D40108',    
     'Brighton & Hove Albion': '#0057B8',    
@@ -58,6 +58,32 @@ team_colors = {
     'Wolverhampton Wanderers': '#EEDC04',    
     'Everton': '#003399'
 }
+
+# Manually map the team names in the dataset to match the team names in the color dictionary
+team_name_mapping = {
+    'Tottenham': 'Tottenham Hotspur',
+    'Newcastle': 'Newcastle United',
+    'West Ham': 'West Ham United',
+    'Leeds': 'Leeds United',
+    'Leicester': 'Leicester City',
+    'Crystal Palace': 'Crystal Palace',
+    'Aston Villa': 'Aston Villa',
+    'Fulham': 'Fulham',
+    'Nottingham Forest': 'Nottingham Forest',
+    'Brentford': 'Brentford',
+    'Bournemouth': 'AFC Bournemouth',
+    'Wolves': 'Wolverhampton Wanderers',
+    'Southampton': 'Southampton',
+    'Chelsea': 'Chelsea',
+    'Arsenal': 'Arsenal',
+    'Manchester City': 'Manchester City',
+    'Liverpool': 'Liverpool',
+    'Manchester United': 'Manchester United',
+    'Brighton': 'Brighton & Hove Albion',
+}
+
+# Correct the team names in the dataset to match the color dictionary
+df['team'] = df['team'].replace(team_name_mapping)
 
 # Create a color list based on the teams in the 'home' data
 # Get unique team names from the dataset (combine home and away teams)
