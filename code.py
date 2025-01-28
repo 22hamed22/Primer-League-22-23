@@ -12,6 +12,9 @@ html_code = """
     <img src="https://logowik.com/content/uploads/images/premier-league-lion8499.jpg" alt="Image" width="300" style="float: right;">
 </div>
 """
+# Display the HTML header using Streamlit
+st.markdown(html_code, unsafe_allow_html=True)
+
 # Load the data
 d = pd.read_csv('premier_league_df.csv')
 
