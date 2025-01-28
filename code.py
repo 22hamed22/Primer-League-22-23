@@ -15,7 +15,8 @@ html_code = """
 
 # Read the dataset (you can use your local CSV or load it from a file)
 # Make sure you replace this with the correct path to your CSV
-d = pd.read_csv('/kaggle/input/premier-league-20222023-dataset/premier_league_df.csv')
+d = pd.read_csv('data/premier_league_df.csv')
+
 
 # Display the HTML content
 st.markdown(html_code, unsafe_allow_html=True)
