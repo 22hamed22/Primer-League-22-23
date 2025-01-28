@@ -1,4 +1,8 @@
 import streamlit as st
+import pandas as pd
+import numpy as np
+import plotly.express as px
+import plotly.graph_objs as go
 
 # HTML content with inline CSS
 html_code = """
@@ -11,3 +15,34 @@ html_code = """
 
 # Render the HTML in Streamlit
 st.markdown(html_code, unsafe_allow_html=True)
+
+# Your dataset and code for processing
+# For the sake of this example, I'm creating a simple mock dataset.
+data = {
+    'home team': ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+    'away team': ['Team B', 'Team C', 'Team D', 'Team E', 'Team A'],
+    'FTHG': [2, 1, 3, 1, 4],  # Full Time Home Goals
+    'FTAG': [1, 2, 1, 3, 2]   # Full Time Away Goals
+}
+
+# Convert the data to a pandas DataFrame
+d = pd.DataFrame(data)
+
+# Data processing
+d = d[['home team', 'away team', 'FTHG', 'FTAG']]
+df = d.copy()
+df.rename(columns={'home team': 'team'}, inplace=True)
+df.rename(columns={'FTHG': 'Goal_For'}, inplace=True)
+df.rename(columns={'FTAG': 'Goal_Against'}, inplace=True)
+
+# Grouping and sorting the data
+mean_values = df.groupby('team').sum('Goal_For')
+home = mean_values.sort_values('Goal_For', ascending=False)
+
+# Display the top teams with highest goals
+st.write("Top teams based on total goals scored:")
+st.write(home.head())
+
+# You can also visualize this data using Plotly
+fig = px.bar(home.head(), x=home.head().index, y='Goal_For', title='Top Teams by Goals Scored')
+st.plotly_chart(fig)
