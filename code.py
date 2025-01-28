@@ -15,7 +15,7 @@ html_code = """
 
 # Read the dataset (you can use your local CSV or load it from a file)
 # Make sure you replace this with the correct path to your CSV
-d = pd.read_csv('data/premier_league_df.csv')
+d = pd.read_csv('premier_league_df.csv')
 
 
 # Display the HTML content
