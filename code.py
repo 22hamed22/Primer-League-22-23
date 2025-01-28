@@ -12,6 +12,8 @@ html_code = """
     <img src="https://logowik.com/content/uploads/images/premier-league-lion8499.jpg" alt="Image" width="300" style="float: right;">
 </div>
 """
+d=pd.read_csv('/kaggle/input/premier-league-20222023-dataset/premier_league_df.csv')
+d.head()
 
 # Render the HTML in Streamlit
 st.markdown(html_code, unsafe_allow_html=True)
