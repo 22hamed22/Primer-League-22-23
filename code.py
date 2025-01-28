@@ -37,7 +37,7 @@ st.write(home.head())
 
 # New color dictionary provided
 team_colors = {
-    'Manchester City': '#01D4D1',    
+    'Man City': '#01D4D1',    
     'Arsenal': '#FA3737',    
     'Liverpool': '#D40108',    
     'Brighton & Hove Albion': '#0057B8',    
