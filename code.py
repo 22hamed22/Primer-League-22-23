@@ -2,6 +2,17 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
+# HTML content with inline CSS for Streamlit header
+html_code = """
+<div class="h1" style="background-color: #FFFFFF; color: #470B63; padding: 20px; font-size: 45px; max-width: 3500px; margin: auto; margin-top: 50px; display: flex; align-items: center; text-align: center; text-shadow: 1px 1px 1px #13A7AC;">
+    <img src="https://logowik.com/content/uploads/images/premier-league-lion8499.jpg" alt="Image" width="300" style="float: left;">
+    <span style="margin: auto; font-weight: bold;">Analysis of the Premier League season 2022-2023</span>
+    <img src="https://logowik.com/content/uploads/images/premier-league-lion8499.jpg" alt="Image" width="300" style="float: right;">
+</div>
+"""
+# Display the HTML header using Streamlit
+st.markdown(html_code, unsafe_allow_html=True)
+
 # Load the data (use your actual CSV file location here)
 d = pd.read_csv('premier_league_df.csv')
 
@@ -20,7 +31,11 @@ df.rename(columns={'FTAG': 'Goal_Against'}, inplace=True)
 mean_values = df.groupby('team').sum('Goal_For')
 home = mean_values.sort_values('Goal_For', ascending=False)
 
-# Create a predefined color dictionary for teams
+# Display the top teams based on goals scored
+st.write("Top teams based on total goals scored:")
+st.write(home.head())
+
+# Create a color map for each team dynamically
 team_colors = {
     'Arsenal': '#D00000',  # Arsenal Red (RAL 3000 Flame Red)
     'Manchester City': '#A7C6ED',  # Manchester City Sky Blue (Hex: #A7C6ED)
@@ -36,19 +51,12 @@ team_colors = {
     'Crystal Palace': '#1B3561',  # Crystal Palace Blue (RAL 4005 Blue Lilac)
 }
 
-# Get unique team names from both home and away teams in the dataset
+# Create a color list based on the teams in the 'home' data
+# Get unique team names from the dataset (combine home and away teams)
 teams_in_data = pd.concat([df['team'], d['away team']]).unique()
 
-# Create a color map for teams in the dataset
-team_colors_map = {}
-
-# Assign colors to the teams in the dataset (use the predefined color or default color if not in the dictionary)
-for team in teams_in_data:
-    team_colors_map[team] = team_colors.get(team, '#000000')  # Default color is black if team not in the dictionary
-
-# Display the top teams based on goals scored
-st.write("Top teams based on total goals scored:")
-st.write(home.head())
+# Assign colors to each team
+team_colors_map = {team: team_colors.get(team, '#000000') for team in teams_in_data}
 
 # Plotting the data using Plotly with each team having a different color
 fig = px.bar(home.head(), 
@@ -56,7 +64,7 @@ fig = px.bar(home.head(),
              y='Goal_For', 
              title='Top Teams by Goals Scored',
              color=home.head().index,  # Color by team name (index)
-             color_discrete_map=team_colors_map)  # Use custom colors for each team
+             color_discrete_map=team_colors_map)  # Use custom colors
 
 # Display the chart in Streamlit
 st.plotly_chart(fig)
