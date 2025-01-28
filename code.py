@@ -55,7 +55,7 @@ team_colors = {
 fig = px.bar(home.head(), 
              x=home.head().index, 
              y='Goal_For', 
-             title='Top Teams by Goals Scored', 
+             title='Top Teams by Goals Scored',
              color=home.head().index,  # Color by team name (index)
              color_discrete_map=team_colors)  # Use custom colors
 
