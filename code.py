@@ -1,8 +1,6 @@
-import streamlit as st
 import pandas as pd
-import numpy as np
 import plotly.express as px
-import plotly.graph_objs as go
+import streamlit as st
 
 # HTML content with inline CSS
 html_code = """
@@ -18,24 +16,39 @@ st.markdown(html_code, unsafe_allow_html=True)
 # Load the data
 d = pd.read_csv('premier_league_df.csv')
 
+# Display the columns to check for mismatches
+st.write("Columns in the dataset:")
+st.write(d.columns)
 
-# Data processing as per the new request
-d = d[['home team', 'away team', 'FTHG', 'FTAG']]
-df = d.copy()
+# Strip any extra spaces from the column names
+d.columns = d.columns.str.strip()
 
-# Renaming columns for clarity
-df.rename(columns={'home team': 'team'}, inplace=True)
-df.rename(columns={'FTHG': 'Goal_For'}, inplace=True)
-df.rename(columns={'FTAG': 'Goal_Against'}, inplace=True)
+# Check if all expected columns are present
+expected_columns = ['HomeTeam', 'AwayTeam', 'FTHG', 'FTAG']
+missing_columns = [col for col in expected_columns if col not in d.columns]
 
-# Grouping and sorting the data
-mean_values = df.groupby('team').sum('Goal_For')
-home = mean_values.sort_values('Goal_For', ascending=False)
+# If any columns are missing, show an error
+if missing_columns:
+    st.error(f"Missing columns: {', '.join(missing_columns)}")
+else:
+    # Proceed with data processing
+    d = d[expected_columns]
+    df = d.copy()
 
-# Display the top teams based on goals scored
-st.write("Top teams based on total goals scored:")
-st.write(home.head())
+    # Renaming columns for clarity
+    df.rename(columns={'HomeTeam': 'team'}, inplace=True)
+    df.rename(columns={'FTHG': 'Goal_For'}, inplace=True)
+    df.rename(columns={'FTAG': 'Goal_Against'}, inplace=True)
 
-# Plotting the data using Plotly
-fig = px.bar(home.head(), x=home.head().index, y='Goal_For', title='Top Teams by Goals Scored')
-st.plotly_chart(fig)
+    # Grouping and sorting the data
+    mean_values = df.groupby('team').sum('Goal_For')
+    home = mean_values.sort_values('Goal_For', ascending=False)
+
+    # Display the top teams based on goals scored
+    st.write("Top teams based on total goals scored:")
+    st.write(home.head())
+
+    # Plotting the data using Plotly
+    fig = px.bar(home.head(), x=home.head().index, y='Goal_For', title='Top Teams by Goals Scored')
+    st.plotly_chart(fig)
+
