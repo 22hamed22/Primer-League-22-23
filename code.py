@@ -124,3 +124,16 @@ fig_total_against = px.bar(total_goals.sort_values('Goal_Against', ascending=Fal
                            color=total_goals.sort_values('Goal_Against', ascending=False).index,  # Color by team name (index)
                            color_discrete_map=team_colors_map)  # Use custom colors
 st.plotly_chart(fig_total_against)
+
+# Add the 'Goal Difference' plot
+# Calculate goal difference (Goals For - Goals Against)
+total_goals['Goal_Difference'] = total_goals['Goal_For'] - total_goals['Goal_Against']
+
+# Goal Difference plot
+fig_goal_diff = px.bar(total_goals.sort_values('Goal_Difference', ascending=False), 
+                       x=total_goals.sort_values('Goal_Difference', ascending=False).index, 
+                       y='Goal_Difference', 
+                       title='Goal Difference by Each Team', 
+                       color=total_goals.sort_values('Goal_Difference', ascending=False).index,  # Color by team name (index)
+                       color_discrete_map=team_colors_map)  # Use custom colors
+st.plotly_chart(fig_goal_diff)
