@@ -13,7 +13,7 @@ html_code = """
 # Display the HTML header using Streamlit
 st.markdown(html_code, unsafe_allow_html=True)
 
-# Load the data (use your actual CSV file location here)
+# Load the data
 d = pd.read_csv('premier_league_df.csv')
 
 # Renaming columns for consistency with the expected column names
@@ -27,6 +27,33 @@ df.rename(columns={'home team': 'team'}, inplace=True)
 df.rename(columns={'FTHG': 'Goal_For'}, inplace=True)
 df.rename(columns={'FTAG': 'Goal_Against'}, inplace=True)
 
+# Standardizing team names to match the team_colors dictionary
+team_name_mapping = {
+    'Man City': 'Manchester City',
+    'Tottenham': 'Tottenham Hotspur',
+    'West Ham': 'West Ham United',
+    'Leicester': 'Leicester City',
+    'Crystal Palace': 'Crystal Palace',
+    'Aston Villa': 'Aston Villa',
+    'Nottingham Forest': 'Nottingham Forest',
+    'Brighton': 'Brighton & Hove Albion',
+    'Fulham': 'Fulham',
+    'Chelsea': 'Chelsea',
+    'Liverpool': 'Liverpool',
+    'Southampton': 'Southampton',
+    'Everton': 'Everton',
+    'Leeds': 'Leeds United',
+    'Brentford': 'Brentford',
+    'Bournemouth': 'AFC Bournemouth',
+    'Arsenal': 'Arsenal',
+    'Manchester United': 'Manchester United',
+    'Newcastle': 'Newcastle United',
+    'Wolverhampton': 'Wolverhampton Wanderers'
+}
+
+# Apply the name mapping
+df['team'] = df['team'].replace(team_name_mapping)
+
 # Grouping and sorting the data
 mean_values = df.groupby('team').sum('Goal_For')
 home = mean_values.sort_values('Goal_For', ascending=False)
@@ -35,7 +62,7 @@ home = mean_values.sort_values('Goal_For', ascending=False)
 st.write("Top teams based on total goals scored:")
 st.write(home.head())
 
-# Color dictionary with updated team names
+# Define team colors (these are your team-color pairs)
 team_colors = {
     'Manchester City': '#01D4D1',    
     'Arsenal': '#FA3737',    
@@ -59,46 +86,19 @@ team_colors = {
     'Everton': '#003399'
 }
 
-# Manually map the team names in the dataset to match the team names in the color dictionary
-team_name_mapping = {
-    'Tottenham': 'Tottenham Hotspur',
-    'Newcastle': 'Newcastle United',
-    'West Ham': 'West Ham United',
-    'Leeds': 'Leeds United',
-    'Leicester': 'Leicester City',
-    'Crystal Palace': 'Crystal Palace',
-    'Aston Villa': 'Aston Villa',
-    'Fulham': 'Fulham',
-    'Nottingham Forest': 'Nottingham Forest',
-    'Brentford': 'Brentford',
-    'Bournemouth': 'AFC Bournemouth',
-    'Wolves': 'Wolverhampton Wanderers',
-    'Southampton': 'Southampton',
-    'Chelsea': 'Chelsea',
-    'Arsenal': 'Arsenal',
-    'Manchester City': 'Manchester City',
-    'Liverpool': 'Liverpool',
-    'Manchester United': 'Manchester United',
-    'Brighton': 'Brighton & Hove Albion',
-}
-
-# Correct the team names in the dataset to match the color dictionary
-df['team'] = df['team'].replace(team_name_mapping)
-
-# Create a color list based on the teams in the 'home' data
-# Get unique team names from the dataset (combine home and away teams)
+# Extract the teams that appear in your dataset, both home and away
 teams_in_data = pd.concat([df['team'], d['away team']]).unique()
 
-# Assign colors to each team
+# Match the dataset team names with the team_colors dictionary
 team_colors_map = {team: team_colors.get(team, '#000000') for team in teams_in_data}
 
 # Plotting the data using Plotly with each team having a different color
 fig = px.bar(home.head(), 
              x=home.head().index, 
              y='Goal_For', 
-             title='Top Teams by Goals Scored',
+             title='Top Teams by Goals Scored', 
              color=home.head().index,  # Color by team name (index)
-             color_discrete_map=team_colors_map)  # Use custom colors
+             color_discrete_map=team_colors_map)  # Use custom colors for each team
 
-# Display the chart in Streamlit
+# Show the plot in Streamlit
 st.plotly_chart(fig)
