@@ -137,3 +137,16 @@ fig_goal_diff = px.bar(total_goals.sort_values('Goal_Difference', ascending=Fals
                        color=total_goals.sort_values('Goal_Difference', ascending=False).index,  # Color by team name (index)
                        color_discrete_map=team_colors_map)  # Use custom colors
 st.plotly_chart(fig_goal_diff)
+
+# Add the 'Goal_For_Home' plot
+# Calculate total goals scored at home
+home_goals = df.groupby('team').sum()['Goal_For']  # Home goals are 'Goal_For' in the home team data
+
+# Home Goals plot
+fig_home_goals = px.bar(home_goals.sort_values(ascending=False), 
+                        x=home_goals.sort_values(ascending=False).index, 
+                        y=home_goals.sort_values(ascending=False), 
+                        title='Goals Scored by Each Team at Home', 
+                        color=home_goals.sort_values(ascending=False).index,  # Color by team name (index)
+                        color_discrete_map=team_colors_map)  # Use custom colors
+st.plotly_chart(fig_home_goals)
