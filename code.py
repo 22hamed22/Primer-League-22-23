@@ -107,3 +107,7 @@ team_colors_map = {team: team_colors.get(team, '#000000') for team in teams_in_d
 # Plotting the 'Total_Goal_For' and 'Total_Goal_Against'
 plot(merged_df, 'Goal_For')
 plot(merged_df, 'Goal_Against')
+
+# Additional plots for total goals
+plot(merged_df, 'Goal_For')  # Total Goals Scored
+plot(merged_df, 'Goal_Against')  # Total Goals Against
