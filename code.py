@@ -107,20 +107,20 @@ st.plotly_chart(fig)
 # Group by 'team' and sum 'Goal_For' and 'Goal_Against' for total goals
 total_goals = df.groupby('team').sum()
 
-# Total Goals Scored (Total_Goal_For)
-fig_total_for = px.bar(total_goals, 
-                       x=total_goals.index, 
+# Total Goals Scored (Total_Goal_For) in descending order
+fig_total_for = px.bar(total_goals.sort_values('Goal_For', ascending=False), 
+                       x=total_goals.sort_values('Goal_For', ascending=False).index, 
                        y='Goal_For', 
-                       title='Total Goals Scored by Each Team', 
-                       color=total_goals.index,  # Color by team name (index)
+                       title='Total Goals Scored by Each Team (Descending)', 
+                       color=total_goals.sort_values('Goal_For', ascending=False).index,  # Color by team name (index)
                        color_discrete_map=team_colors_map)  # Use custom colors
 st.plotly_chart(fig_total_for)
 
-# Total Goals Conceded (Total_Goal_Against)
-fig_total_against = px.bar(total_goals, 
-                           x=total_goals.index, 
+# Total Goals Conceded (Total_Goal_Against) in descending order
+fig_total_against = px.bar(total_goals.sort_values('Goal_Against', ascending=False), 
+                           x=total_goals.sort_values('Goal_Against', ascending=False).index, 
                            y='Goal_Against', 
-                           title='Total Goals Conceded by Each Team', 
-                           color=total_goals.index,  # Color by team name (index)
+                           title='Total Goals Conceded by Each Team (Descending)', 
+                           color=total_goals.sort_values('Goal_Against', ascending=False).index,  # Color by team name (index)
                            color_discrete_map=team_colors_map)  # Use custom colors
 st.plotly_chart(fig_total_against)
