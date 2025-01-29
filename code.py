@@ -54,25 +54,13 @@ team_name_mapping = {
 # Apply the name mapping
 df['team'] = df['team'].replace(team_name_mapping)
 
-# Grouping and sorting the data for Goals For and Goals Against
-mean_values = df.groupby('team').sum()
-
-# Creating merged dataframe for additional columns
-merged_df = mean_values.sort_values(by='Goal_For', ascending=False)
+# Grouping and sorting the data
+mean_values = df.groupby('team').sum('Goal_For')
+home = mean_values.sort_values('Goal_For', ascending=False)
 
 # Display the top teams based on goals scored
 st.write("Top teams based on total goals scored:")
-st.write(merged_df.head())
-
-# Plotting function for a given column (for Total_Goal_For and Total_Goal_Against)
-def plot(data, column_name):
-    fig = px.bar(data, 
-                 x=data.index, 
-                 y=column_name, 
-                 title=f'Top Teams by {column_name.replace("_", " ").title()}', 
-                 color=data.index,  # Color by team name (index)
-                 color_discrete_map=team_colors_map)  # Use custom colors for each team
-    st.plotly_chart(fig)
+st.write(home.head())
 
 # Define team colors (these are your team-color pairs)
 team_colors = {
@@ -104,10 +92,35 @@ teams_in_data = pd.concat([df['team'], d['away team']]).unique()
 # Match the dataset team names with the team_colors dictionary
 team_colors_map = {team: team_colors.get(team, '#000000') for team in teams_in_data}
 
-# Plotting the 'Total_Goal_For' and 'Total_Goal_Against'
-plot(merged_df, 'Goal_For')
-plot(merged_df, 'Goal_Against')
+# Plotting the data using Plotly with each team having a different color
+fig = px.bar(home.head(), 
+             x=home.head().index, 
+             y='Goal_For', 
+             title='Top Teams by Goals Scored', 
+             color=home.head().index,  # Color by team name (index)
+             color_discrete_map=team_colors_map)  # Use custom colors for each team
 
-# Additional plots for total goals
-plot(merged_df, 'Goal_For')  # Total Goals Scored
-plot(merged_df, 'Goal_Against')  # Total Goals Against
+# Show the plot in Streamlit
+st.plotly_chart(fig)
+
+# Plotting the 'Total_Goal_For' and 'Total_Goal_Against' for additional insights
+# Group by 'team' and sum 'Goal_For' and 'Goal_Against' for total goals
+total_goals = df.groupby('team').sum()
+
+# Total Goals Scored (Total_Goal_For)
+fig_total_for = px.bar(total_goals, 
+                       x=total_goals.index, 
+                       y='Goal_For', 
+                       title='Total Goals Scored by Each Team', 
+                       color=total_goals.index,  # Color by team name (index)
+                       color_discrete_map=team_colors_map)  # Use custom colors
+st.plotly_chart(fig_total_for)
+
+# Total Goals Conceded (Total_Goal_Against)
+fig_total_against = px.bar(total_goals, 
+                           x=total_goals.index, 
+                           y='Goal_Against', 
+                           title='Total Goals Conceded by Each Team', 
+                           color=total_goals.index,  # Color by team name (index)
+                           color_discrete_map=team_colors_map)  # Use custom colors
+st.plotly_chart(fig_total_against)
