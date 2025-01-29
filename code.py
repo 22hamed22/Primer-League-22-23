@@ -108,48 +108,48 @@ st.plotly_chart(fig)
 total_goals = df.groupby('team').sum()
 
 # Total Goals Scored (Total_Goal_For)
-fig_total_for = px.bar(total_goals, 
-                       x=total_goals.index, 
+fig_total_for = px.bar(total_goals.sort_values('Goal_For', ascending=False), 
+                       x=total_goals.sort_values('Goal_For', ascending=False).index, 
                        y='Goal_For', 
                        title='Total Goals Scored by Each Team', 
-                       color=total_goals.index,  # Color by team name (index)
+                       color=total_goals.sort_values('Goal_For', ascending=False).index,  # Color by team name (index)
                        color_discrete_map=team_colors_map)  # Use custom colors
 st.plotly_chart(fig_total_for)
 
 # Total Goals Conceded (Total_Goal_Against)
-fig_total_against = px.bar(total_goals, 
-                           x=total_goals.index, 
+fig_total_against = px.bar(total_goals.sort_values('Goal_Against', ascending=False), 
+                           x=total_goals.sort_values('Goal_Against', ascending=False).index, 
                            y='Goal_Against', 
                            title='Total Goals Conceded by Each Team', 
-                           color=total_goals.index,  # Color by team name (index)
+                           color=total_goals.sort_values('Goal_Against', ascending=False).index,  # Color by team name (index)
                            color_discrete_map=team_colors_map)  # Use custom colors
 st.plotly_chart(fig_total_against)
 
 # Add the requested plots:
 # Goal Difference (Total Goals For - Total Goals Against)
 total_goals['Goal_Difference'] = total_goals['Goal_For'] - total_goals['Goal_Against']
-fig_goal_diff = px.bar(total_goals, 
-                       x=total_goals.index, 
+fig_goal_diff = px.bar(total_goals.sort_values('Goal_Difference', ascending=False), 
+                       x=total_goals.sort_values('Goal_Difference', ascending=False).index, 
                        y='Goal_Difference', 
                        title='Goal Difference by Each Team', 
-                       color=total_goals.index, 
+                       color=total_goals.sort_values('Goal_Difference', ascending=False).index, 
                        color_discrete_map=team_colors_map)
 st.plotly_chart(fig_goal_diff)
 
 # Goals For at Home
-fig_goal_for_home = px.bar(d.groupby('home team').sum(), 
-                           x=d.groupby('home team').sum().index, 
+fig_goal_for_home = px.bar(d.groupby('home team').sum().sort_values('FTHG', ascending=False), 
+                           x=d.groupby('home team').sum().sort_values('FTHG', ascending=False).index, 
                            y='FTHG', 
                            title='Goals Scored at Home by Each Team', 
-                           color=d.groupby('home team').sum().index, 
+                           color=d.groupby('home team').sum().sort_values('FTHG', ascending=False).index, 
                            color_discrete_map=team_colors_map)
 st.plotly_chart(fig_goal_for_home)
 
 # Goals For Away
-fig_goal_for_away = px.bar(d.groupby('away team').sum(), 
-                           x=d.groupby('away team').sum().index, 
+fig_goal_for_away = px.bar(d.groupby('away team').sum().sort_values('FTAG', ascending=False), 
+                           x=d.groupby('away team').sum().sort_values('FTAG', ascending=False).index, 
                            y='FTAG', 
                            title='Goals Scored Away by Each Team', 
-                           color=d.groupby('away team').sum().index, 
+                           color=d.groupby('away team').sum().sort_values('FTAG', ascending=False).index, 
                            color_discrete_map=team_colors_map)
 st.plotly_chart(fig_goal_for_away)
